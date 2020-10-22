@@ -1,6 +1,8 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const http = require('http');
+const path = require('path');
+const { fileLoader, mergeTypes } = require('merge-graphql-schemas');
 
 const PORT = 8000;
 
@@ -9,16 +11,14 @@ const app = express();
 
 // graphql server
 // types query/ mutation / subscription
-const typeDefs = `
-type Query{
-  totalPosts: Int!
-}
-`;
+// typeDefs
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './typeDefs'))); //Go to root directory, go to the typeDefs folder, load all the files merge them and make them available in typeDefs variable
 
 // resolvers
 const resolvers = {
   Query: {
-    totalPosts: () => 42
+    totalPosts: () => 42,
+    me: () => 'Ryan'
   }
 };
 
