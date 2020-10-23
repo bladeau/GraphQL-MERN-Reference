@@ -1,5 +1,6 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
+const mongoose = require('mongoose');
 const http = require('http');
 const path = require('path');
 const {
@@ -8,11 +9,30 @@ const {
   mergeResolvers
 } = require('merge-graphql-schemas');
 
+require('dotenv').config();
+
 const PORT = 8000;
 
 //express server
 const app = express();
 
+//db
+const db = async () => {
+  try {
+    const success = await mongoose.connect(process.env.DATABASE_CLOUD, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    });
+    console.log('DB Connected');
+  } catch (error) {
+    console.log('DB Connection Error:', error);
+  }
+};
+
+//execute database connection,
+db();
 // graphql server
 // types query/ mutation / subscription
 // typeDefs
